@@ -485,10 +485,6 @@ module vending_machine_test();
 	
 	initial begin
 		#10;
-
-`ifdef INFO
-		$display("This test is intended to test the VAFLA_BOROVEC case");
-`endif
 		/* Reset active low */
 		rst = 1'b1;
 		#1;
@@ -518,11 +514,41 @@ module vending_machine_test();
 		in2 = 1'b0;
 		in3 = 1'b0;
 
-		/* Insert one coin with value 2 */
+		/* Insert one coin with value 1 */
 		c1  = 1'b1;
 		#2;
 		c1  = 1'b0;
 
+		/* Insert one coin with value 2 */
+		#1000
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+
+		/* Select item3 - SLANINA */
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b1;
+		#10;
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b0;
+
+		/* Insert one coin with value 2 */
+		#1000
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+
+		/* Insert one coin with value 2 */
+		#1000
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+
+		/* Insert one coin with value 2 */
 		#1000
 		c2  = 1'b1;
 		#2;
