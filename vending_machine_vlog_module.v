@@ -1,5 +1,8 @@
+`define INFO
+`define DEBUG
+
 module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk);
-	
+
 	reg [5:0] state, nextstate; 
 
 	/* Vending machine inputs */
@@ -55,7 +58,9 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 	/* Variables initialization */
 	initial begin
 		coincount = 3'b000;
+	`ifdef INFO
 		$display("Variable Initialization Completed!");
+	`endif
 	end
 
 	/* Always block to update state */
@@ -64,47 +69,45 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 		if (rst)
 		begin	
 			state <= IDLE;
-			$display("!rst");
 		end
 		else 
 			state <= nextstate;
 	end
 
-	/* Always block to compute both output & nextstate */
+	/* Always block to compute nextstate */
 	always @(state, c1, c2, in0, in1, in2, in3, cnl)
 	begin
 		nextstate = state;
-		
 		case(state)
 			IDLE:
 			begin
-				coincount = 3'b000;
-				cng	  = 3'b000;
-	
 				if(in0 & !in1 & !in2 & !in3)
 					begin
 						nextstate = ITEM0_IN0;
-						pdt 	  = 1'b0;
+	`ifdef DEBUG
 						$display("ITEM0");
-						$display("%h", nextstate);
+	`endif
 					end						
 				else if (!in0 & in1 & !in2 & !in3)	
 					begin
 						nextstate = ITEM1_IN1;
-						pdt 	  = 1'b0;
+	`ifdef DEBUG
 						$display("ITEM1");
+	`endif
 					end
 				else if (!in0 & !in1 & in2 & !in3)	
 					begin
 						nextstate = ITEM2_IN2;
-						pdt 	  = 1'b0;
+	`ifdef DEBUG
 						$display("ITEM2");
+	`endif
 					end
 				else if (!in0 & !in1 & !in2 & in3)	
 					begin
 						nextstate = ITEM3_IN3;
-						pdt 	  = 1'b0;
+	`ifdef DEBUG
 						$display("ITEM3");
+	`endif
 					end
 				else
 					nextstate = IDLE;
@@ -113,60 +116,60 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 			ITEM0_IN0:
 			begin
 				nextstate = WAITING_0;
+	`ifdef DEBUG
 				$display("ITEM0_IN0");
-			end	
+	`endif
+			end
 
 			ITEM1_IN1:
 			begin
 				nextstate = WAITING_1;
+	`ifdef DEBUG
 				$display("ITEM1_IN1");
+	`endif
 			end
 
 			ITEM2_IN2:
 			begin
 				nextstate = WAITING_2;
+	`ifdef DEBUG
 				$display("ITEM2_IN2");
+	`endif
 			end
 			
 			ITEM3_IN3:
 			begin
 				nextstate = WAITING_3;
+	`ifdef DEBUG
 				$display("ITEM3_IN3");
+	`endif
 			end
 			
 			WAITING_0:
 			begin
+	`ifdef DEBUG
+				$display("CC %b = %d", coincount, coincount);
+	`endif
 				pdt = 1'b0;
 				cng = 3'b000;
+	`ifdef DEBUG
 				$display("WAITING_0");
-				$display("%d", coincount);
+	`endif
 				if (coincount > 2)
-				begin
-					$display("COINC > 2 W0");
 					nextstate = VAFLA_BOROVEC;
-				end
-				if (c1 & !c2 & (coincount < 3))
-				begin
-					$display("C1_W0");
-					nextstate = ST0;	
-				end
-				if (!c1 & c2 & (coincount < 3))
-				begin
-					$display("C2_W0");
+				else if (c1 & !c2 & (coincount < 3))
+					nextstate = ST0;
+				else if (!c1 & c2 & (coincount < 3))
 					nextstate = ST1;
-				end
-				if (cnl)
-				begin
-					$display("CNL W0");
-					nextstate = CNL_ST;	
-				end	
+				else if (cnl)
+					nextstate = CNL_ST;
 			end
 
 			WAITING_1:
 			begin
-				pdt = 1'b0;
-				cng = 3'b000;
+	`ifdef DEBUG
 				$display("WAITING_1");
+	`endif
 				if (coincount > 3)
 					nextstate = PATRON_VODKA;
 				if (c1 & !c2 & (coincount < 4))
@@ -174,14 +177,16 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 				if (!c1 & c2 & (coincount < 4))
 					nextstate = ST3;
 				if (cnl)
-					nextstate = CNL_ST;		
+					nextstate = CNL_ST;
 			end
 
 			WAITING_2:
 			begin
 				pdt = 1'b0;
 				cng = 3'b000;
-				$display("WAITING_2");
+	`ifdef DEBUG
+				$display("WAITING_2"); 
+	`endif
 				if (coincount > 4)
 					nextstate = ZLATNA_ARDA;
 				if (c1 & !c2 & (coincount < 5))
@@ -194,9 +199,9 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 			
 			WAITING_3:
 			begin
-				pdt = 1'b0;
-				cng = 3'b000;
+	`ifdef DEBUG
 				$display("WAITING_3");
+	`endif
 				if (coincount > 5)
 					nextstate = SLANINA;
 				if (c1 & !c2 & (coincount < 6))
@@ -209,100 +214,86 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 
 			ST0:
 			begin
-				nextstate = VAFLA_BOROVEC;
-				cng = 3'b000;
-				coincount = coincount + 1;
-				pdt = 1'b0;
+	`ifdef DEBUG
+				$display("ST0"); 			
+	`endif
+				nextstate = WAITING_0;
 			end
 
 			ST1:
 			begin
-				$display("ST1");
-				nextstate = VAFLA_BOROVEC;
-				cng = 3'b000;
-				coincount = coincount + 2;
-				pdt = 1'b0;
+	`ifdef DEBUG
+					$display("ST1"); 			
+	`endif
+				nextstate = WAITING_0;
 			end
 
 			ST2:
 			begin
-				nextstate = PATRON_VODKA;
-				cng = 3'b000;
-				coincount = coincount + 1;
-				pdt = 1'b0;
+				nextstate = WAITING_1;
 			end
 
 			ST3:
 			begin
-				nextstate = PATRON_VODKA;
-				cng = 3'b000;
-				coincount = coincount + 2;
-				pdt = 1'b0;
+				nextstate = WAITING_1;
 			end
 
 			ST4:
 			begin
-				nextstate = ZLATNA_ARDA;
-				cng = 3'b000;
-				coincount = coincount + 1;
-				pdt = 1'b0;
+				nextstate = WAITING_2;
 			end
 
 			ST5:
 			begin
-				nextstate = ZLATNA_ARDA;
-				cng = 3'b000;
-				coincount = coincount + 2;
-				pdt = 1'b0;
+				nextstate = WAITING_2;
 			end
 
 			ST6:
 			begin
-				nextstate = SLANINA;
-				cng = 3'b000;
-				coincount = coincount + 1;
-				pdt = 1'b0;
+				nextstate = WAITING_3;
 			end
 
 			ST7:
 			begin
-				nextstate = SLANINA;
-				cng = 3'b000;
-				coincount = coincount + 2;
-				pdt = 1'b0;
+				nextstate = WAITING_3;
 			end
-
 
 			VAFLA_BOROVEC:
 			begin
-				$display("FAFLA");
-				cng	  = coincount - 3;
-				pdt 	  = 1'b1;
+	`ifdef DEBUG
+				$display("VAFLA_BOROVEC");
+				$display("CC %b = %d", coincount, coincount);
+	`endif
 				nextstate = IDLE; 
 			end
 			
 			PATRON_VODKA:
 			begin
-				cng = coincount - 4;
-				pdt = 1'b1;
+	`ifdef DEBUG
+				$display("PATRON_VODKA");
+	`endif
+				nextstate = IDLE; 
 			end
 
 			ZLATNA_ARDA:
 			begin
-				cng = coincount - 5;
-				pdt = 1'b1;
+	`ifdef DEBUG
+				$display("ZLATNA_ARDA");
+	`endif
+				nextstate = IDLE; 
 			end
 
 			SLANINA:
 			begin
-				cng = coincount - 6;
-				pdt = 1'b1;
+	`ifdef DEBUG
+				$display("SLANINA");
+	`endif
+				nextstate = IDLE; 
 			end
 
 			CNL_ST:
 			begin
 				nextstate = IDLE;
-				rtn = coincount;
 			end
 			
 			default:
@@ -312,6 +303,153 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 			end
 		endcase
 	end
+
+	/* Always block to compute output logic */
+	always @(posedge clk)
+		case (state)
+		IDLE:
+			begin
+				pdt  	  = 1'b0;
+				coincount = 3'b000;
+				cng	  	  = 3'b000;
+			end
+		ITEM0_IN0:
+			begin
+				pdt  	  = 1'b0;
+				coincount = 3'b000;
+				cng	  	  = 3'b000;
+			end
+		ITEM1_IN1:
+			begin
+				pdt  	  = 1'b0;
+				coincount = 3'b000;
+				cng	  = 3'b000;
+			end
+
+		ITEM2_IN2:
+			begin
+				pdt  	  = 1'b0;
+				coincount = 3'b000;
+				cng	  = 3'b000;
+		end
+
+		ITEM3_IN3:
+			begin
+				pdt  	  = 1'b0;
+				coincount = 3'b000;
+				cng	  = 3'b000;
+			end
+
+		WAITING_0:
+			begin
+				pdt = 1'b0;
+				cng = 3'b000;
+			end
+
+		WAITING_1:
+			begin
+				pdt = 1'b0;
+				cng = 3'b000;
+			end
+
+		WAITING_2:
+			begin
+				pdt = 1'b0;
+				cng = 3'b000;
+			end
+
+		WAITING_3:
+			begin
+				pdt = 1'b0;
+				cng = 3'b000;
+			end
+
+		ST0:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 1;
+				pdt = 1'b0;
+			end
+
+		ST1:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 2;
+				pdt = 1'b0;
+			end
+
+		ST2:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 1;
+				pdt = 1'b0;
+			end
+
+		ST3:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 2;
+				pdt = 1'b0;
+			end
+
+		ST4:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 1;
+				pdt = 1'b0;
+			end
+
+		ST5:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 2;
+				pdt = 1'b0;
+			end
+
+		ST6:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 1;
+				pdt = 1'b0;
+			end
+
+		ST7:
+			begin
+				cng = 3'b000;
+				coincount = coincount + 2;
+				pdt = 1'b0;
+			end
+
+		VAFLA_BOROVEC:
+			begin
+				cng	  = coincount - 3;
+				pdt   = 1'b1;
+			end
+			
+		PATRON_VODKA:
+			begin
+				cng = coincount - 4;
+				pdt = 1'b1;
+			end
+
+		ZLATNA_ARDA:
+			begin
+				cng = coincount - 5;
+				pdt = 1'b1;
+			end
+
+		SLANINA:
+			begin
+				cng = coincount - 6;
+				pdt = 1'b1;
+			end
+
+		CNL_ST:
+			begin
+				rtn = coincount;
+			end
+		endcase
+
 endmodule
 
 `timescale 1 ns / 1 ns
@@ -325,41 +463,62 @@ module vending_machine_test();
 			    .cnl(cnl), .clk(clk), .rst(rst), .pdt(pdt), .cng(cng), .rtn(rtn));
 	
 	initial begin
-		clk = 1'b1;
 		#10;
+
+`ifdef INFO
+		$display("This test is intended to test the VAFLA_BOROVEC case");
+`endif
+		/* Reset active low */
 		rst = 1'b1;
-		#10;
+		#1;
+		/* Clock starting with high */
+		clk = 1'b1;
+		#1;
+		/* Init the vending machine */
 		rst = 1'b0;
+		#1;
+		c1 = 0;
+		c2 = 0;
+
+		/* Select item0 - VAFLA_BOROVEC */
 		in0 = 1'b1;
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
-		rst = 1'b1;
 		#10;
-		rst = 1'b0;
-
 		in0 = 1'b0;
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
-		#100
+
+		/* Insert one coin with value 2 */
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+
+		#1000
 		c2  = 1'b1;
-		c1  = 1'b0;
-		#100
+		#2;
 		c2  = 1'b0;
+
+		#1000
+		c1  = 1'b1;
+		#2;
 		c1  = 1'b0;
-		
+
 	end
 
-	always #1 
+	always #1
        	begin
 		clk   = ~clk;
   	end
 
-	always #1000
+`ifdef DEBUG
+	always #1
 	begin
-//		if (pdt)
-//			$display("%b", pdt);
+		if (pdt)
+			$display("PDT = 1 CNG = %d", cng);
 	end
+`endif
 
 endmodule
