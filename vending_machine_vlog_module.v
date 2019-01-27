@@ -1,12 +1,14 @@
 `define INFO
 `define DEBUG
 
-module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk);
-
+module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
+					   item0_available, item1_available, item2_available,
+					   item3_available, rst, clk);
 	reg [5:0] state, nextstate; 
 
 	/* Vending machine inputs */
    	input c1, c2, in0, in1, in2, in3, cnl;
+	input item0_available, item1_available, item2_available, item3_available;
 
    	input rst;
 	input clk;
@@ -115,7 +117,13 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 			
 			ITEM0_IN0:
 			begin
-				nextstate = WAITING_0;
+				if (item0_available)
+					nextstate = WAITING_0;
+				else
+					begin
+						$display("No Vafla Borovec available!");
+						nextstate = IDLE;
+					end
 	`ifdef DEBUG
 				$display("ITEM0_IN0");
 	`endif
@@ -123,26 +131,35 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn, rst, clk)
 
 			ITEM1_IN1:
 			begin
-				nextstate = WAITING_1;
-	`ifdef DEBUG
-				$display("ITEM1_IN1");
-	`endif
+				if (item1_available)
+					nextstate = WAITING_1;
+				else
+					begin
+						$display("No Patron Vodka available!");
+						nextstate = IDLE;
+					end
 			end
 
 			ITEM2_IN2:
 			begin
-				nextstate = WAITING_2;
-	`ifdef DEBUG
-				$display("ITEM2_IN2");
-	`endif
+				if (item2_available)
+					nextstate = WAITING_2;
+				else
+					begin
+						$display("No Zlatna Arda available!");
+						nextstate = IDLE;
+					end
 			end
 			
 			ITEM3_IN3:
 			begin
-				nextstate = WAITING_3;
-	`ifdef DEBUG
-				$display("ITEM3_IN3");
-	`endif
+				if (item3_available)
+					nextstate = WAITING_3;
+				else
+					begin
+						$display("No Slanina available!");
+						nextstate = IDLE;
+					end
 			end
 			
 			WAITING_0:
@@ -455,12 +472,16 @@ endmodule
 `timescale 1 ns / 1 ns
 module vending_machine_test();
 	reg c1, c2, in0, in1, in2, in3, cnl, clk, rst;
+	reg item0_available, item1_available, item2_available, item3_available;
 	wire pdt;
 	wire [2:0] cng;
 	wire [2:0] rtn;
 
-	vending_machine dut(.c1(c1), .c2(c2), .in0(in0), .in1(in1), .in2(in2), .in3(in3), 
-			    .cnl(cnl), .clk(clk), .rst(rst), .pdt(pdt), .cng(cng), .rtn(rtn));
+	vending_machine dut(.c1(c1), .c2(c2), .in0(in0), .in1(in1), .in2(in2), .in3(in3),
+			    .cnl(cnl), .clk(clk), .rst(rst), .item0_available(item0_available),
+			    .item1_available(item1_available), .item2_available(item2_available),
+			    .item3_available(item3_available),
+			    .pdt(pdt), .cng(cng), .rtn(rtn));
 	
 	initial begin
 		#10;
@@ -479,6 +500,12 @@ module vending_machine_test();
 		#1;
 		c1 = 0;
 		c2 = 0;
+
+		/* Indicate that all items are available */
+		item0_available = 1'b1;
+		item1_available = 1'b1;
+		item2_available = 1'b1;
+		item3_available = 1'b1;
 
 		/* Select item0 - VAFLA_BOROVEC */
 		in0 = 1'b1;
@@ -500,11 +527,6 @@ module vending_machine_test();
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
-
-		#1000
-		c1  = 1'b1;
-		#2;
-		c1  = 1'b0;
 
 	end
 
