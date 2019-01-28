@@ -512,6 +512,56 @@ module vending_machine_test();
 		#2;
 		cnl = 1'b0;
 
+		in0 = 1'b0;
+		in1 = 1'b1;
+		in2 = 1'b0;
+		in3 = 1'b0;
+		#10;
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b0;
+	
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+	
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b1;
+		in3 = 1'b0;
+		#10;
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b0;
+	
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+	
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		
 	end
 
 	always #1
