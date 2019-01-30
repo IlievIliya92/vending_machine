@@ -1,4 +1,5 @@
 `define WARNING
+//`define FULL_TEST_SCENARIO
 `define INFO
 `define TEST_INFO
 
@@ -428,16 +429,10 @@ module vending_machine_test();
 	wire pdt;
 	wire [2:0] cng;
 	wire [2:0] rtn;
-/*
-	integer clk_file, in0_file, in1_file, in2_file, in3_file, cnl_file, item0_available_file, item1_available_file, item2_available_file, pdt_file, cng0_file, cng1_file, cng2_file, rtn0_file, rtn1_file, rtn2_file;
-*/
 
 	integer out_log_file;
 	integer tick = 0;
-	localparam t_1 = 100;
-	localparam t_0 = 300;
-	integer delta_t = (t_0 + t_1);
-
+	localparam delta_t = 50;
 
 	vending_machine dut(.c1(c1), .c2(c2), .in0(in0), .in1(in1), .in2(in2), .in3(in3),
 			    .cnl(cnl), .clk(clk), .rst(rst), .item0_available(item0_available),
@@ -448,37 +443,36 @@ module vending_machine_test();
 	initial begin
 	out_log_file = $fopen("./timing_diagrams/out_log.txt", "w");
 		
-	#10;
 		/* Reset active low */
 		rst = 1'b1;
-		#10;
 		/* Clock starting with high */
 		clk = 1'b1;
-		#1;
+		#5;
 		/* Init the vending machine */
 		rst = 1'b0;
-		#1;
-		c1 = 0;
-		c2 = 0;
+		#5;
+		c1 = 1'b0;
+		c2 = 1'b0;
 
+		cnl = 0;
 		/* Indicate that all items are available */
 		item0_available = 1'b1;
 		item1_available = 1'b1;
 		item2_available = 1'b1;
 		item3_available = 1'b1;
 
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b0;
+
 		/* Select item0 - VAFLA_BOROVEC */
 		in0 = 1'b1;
-		in1 = 1'b0;
-		in2 = 1'b0;
-		in3 = 1'b0;
 		#10;
 		in0 = 1'b0;
-		in1 = 1'b0;
-		in2 = 1'b0;
-		in3 = 1'b0;
 		$display("[USER INPUT] First item has been selected!");
-
+		
+		#10
 		/* Insert one coin with value 2 */
 		c2  = 1'b1;
 		#2;
@@ -486,128 +480,103 @@ module vending_machine_test();
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1000
+		#2
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
+`ifdef FULL_TEST_SCENARIO
 		/* Select item3 - SLANINA */
-		in0 = 1'b0;
-		in1 = 1'b0;
-		in2 = 1'b0;
 		in3 = 1'b1;
 		#10;
-		in0 = 1'b0;
-		in1 = 1'b0;
-		in2 = 1'b0;
 		in3 = 1'b0;
 		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
-		#1000
+		#1
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1000
+		#1
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1000
+		#1
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Select item3 - SLANINA */
-		in0 = 1'b0;
-		in1 = 1'b0;
 		in2 = 1'b1;
-		in3 = 1'b0;
-		#10;
-		in0 = 1'b0;
-		in1 = 1'b0;
+		#2;
 		in2 = 1'b0;
-		in3 = 1'b0;
 		$display("[USER INPUT] Third item has been selected!");
 
 		/* Insert one coin with value 2 */
-		#1000;
+		#2;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-		#1000;
+		#1;
 		cnl = 1'b1;
 		#2;
 		cnl = 1'b0;
 		$display("[USER INPUT] Requested canceling of the order!");
 
-		in0 = 1'b0;
 		in1 = 1'b1;
-		in2 = 1'b0;
-		in3 = 1'b0;
 		#10;
-		in0 = 1'b0;
 		in1 = 1'b0;
-		in2 = 1'b0;
-		in3 = 1'b0;
 		$display("[USER INPUT] Second item has been selected!");
 
 		/* Insert one coin with value 2 */
-		#1000;
+		#2;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 	
-	
 		/* Insert one coin with value 2 */
-		#1000;
+		#2;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
-		in0 = 1'b0;
-		in1 = 1'b0;
 		in2 = 1'b1;
-		in3 = 1'b0;
 		#10;
-		in0 = 1'b0;
-		in1 = 1'b0;
 		in2 = 1'b0;
-		in3 = 1'b0;
 		$display("[USER INPUT] Third item has been selected!");
 	
 		/* Insert one coin with value 2 */
-		#1000;
+		#1;
 		c1  = 1'b1;
 		#2;
 		c1  = 1'b0;
 		$display("[USER INPUT] Coin 1 with value 1 inserted!");
 	
-		#1000;
+		#1;
 		c1  = 1'b1;
 		#2;
 		c1  = 1'b0;
 		$display("[USER INPUT] Coin 1 with value 1 inserted!");
 	
 		/* Insert one coin with value 2 */
-		#1000;
+		#1;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1000;
+		#1;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
@@ -615,44 +584,39 @@ module vending_machine_test();
 
 	  	/* Purchase not available product */
 	    	item2_available = 1'b0;
-		in0 = 1'b0;
-		in1 = 1'b0;
 		in2 = 1'b1;
-		in3 = 1'b0;
-		#10;
-		in0 = 1'b0;
-		in1 = 1'b0;
+		#2;
 		in2 = 1'b0;
-		in3 = 1'b0;
+`endif
+
 	end
 	
-	
 	always #1
-       	begin   
+       	begin 
 		clk   = ~clk;
 		tick ++;
 		
-		if (tick >= t_0)
-		begin
-			$fwrite(out_log_file,"CLK = %b.\n", clk);
-			$fwrite(out_log_file,"RESET = %b.\n", rst);
-			$fwrite(out_log_file,"IN0 = %b.\n", in0);
-			$fwrite(out_log_file,"IN1 = %b.\n", in1);
-			$fwrite(out_log_file,"IN2 = %b.\n", in2);
-			$fwrite(out_log_file,"IN3 = %b.\n", in3);
-			$fwrite(out_log_file,"CNL = %b.\n", cnl);
-			$fwrite(out_log_file,"ITEM0_AVAILABLE = %b.\n", item0_available);
-			$fwrite(out_log_file,"ITEM1_AVAILABLE = %b.\n", item1_available);
-			$fwrite(out_log_file,"ITEM2_AVAILABLE = %b.\n", item2_available);
-			$fwrite(out_log_file,"ITEM3_AVAILABLE = %b.\n", item3_available);
-			$fwrite(out_log_file,"PDT = %b.\n", pdt);
-			$fwrite(out_log_file,"CHANGE_0 = %b.\n", cng[0]);
-			$fwrite(out_log_file,"CHANGE_1 = %b.\n", cng[1]);
-			$fwrite(out_log_file,"CHANGE_2 = %b.\n", cng[2]);
-			$fwrite(out_log_file,"RETURN_0 = %b.\n", rtn[0]);
-			$fwrite(out_log_file,"RETURN_1 = %b.\n", rtn[1]);
-			$fwrite(out_log_file,"RETURN_3 = %b.\n", rtn[2]);
-		end
+		$fwrite(out_log_file,"CLK = %b.\n", clk);
+		$fwrite(out_log_file,"RESET = %b.\n", rst);
+		$fwrite(out_log_file,"IN0 = %b.\n", in0);
+		$fwrite(out_log_file,"IN1 = %b.\n", in1);
+		$fwrite(out_log_file,"IN2 = %b.\n", in2);
+		$fwrite(out_log_file,"IN3 = %b.\n", in3);
+		$fwrite(out_log_file,"COIN1 = %b.\n", c1);
+		$fwrite(out_log_file,"COIN2 = %b.\n", c2);
+		$fwrite(out_log_file,"CNL = %b.\n", cnl);
+		$fwrite(out_log_file,"ITEM0_AVAILABLE = %b.\n", item0_available);
+		$fwrite(out_log_file,"ITEM1_AVAILABLE = %b.\n", item1_available);
+		$fwrite(out_log_file,"ITEM2_AVAILABLE = %b.\n", item2_available);
+		$fwrite(out_log_file,"ITEM3_AVAILABLE = %b.\n", item3_available);
+		$fwrite(out_log_file,"PDT = %b.\n", pdt);
+		$fwrite(out_log_file,"CHANGE_0 = %b.\n", cng[0]);
+		$fwrite(out_log_file,"CHANGE_1 = %b.\n", cng[1]);
+		$fwrite(out_log_file,"CHANGE_2 = %b.\n", cng[2]);
+		$fwrite(out_log_file,"RETURN_0 = %b.\n", rtn[0]);
+		$fwrite(out_log_file,"RETURN_1 = %b.\n", rtn[1]);
+		$fwrite(out_log_file,"RETURN_3 = %b.\n", rtn[2]);
+	
 		if (delta_t == tick)
 		begin
 			$finish;
