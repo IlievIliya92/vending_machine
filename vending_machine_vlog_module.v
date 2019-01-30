@@ -167,7 +167,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = ST0;
 				else if (!c1 & c2 & (coincount < 3))
 					nextstate = ST1;
-				else if (cnl)
+				else if (cnl | in0 | in1 | in2 | in3)
 					nextstate = CNL_ST;
 			end
 
@@ -179,7 +179,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = ST2;	
 				if (!c1 & c2 & (coincount < 4))
 					nextstate = ST3;
-				if (cnl)
+				if (cnl | in0 | in1 | in2 | in3)
 					nextstate = CNL_ST;
 			end
 
@@ -193,7 +193,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = ST4;	
 				if (!c1 & c2 & (coincount < 5))
 					nextstate = ST5;
-				if (cnl)
+				if (cnl | in0 | in1 | in2 | in3)
 					nextstate = CNL_ST;		
 			end
 			
@@ -205,7 +205,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = ST6;	
 				if (!c1 & c2 & (coincount < 6))
 					nextstate = ST7;
-				if (cnl)
+				if (cnl | in0 | in1 | in2 | in3)
 					nextstate = CNL_ST;		
 			end
 
@@ -478,9 +478,9 @@ module vending_machine_test();
 
 		#10
 		/* Insert one coin with value 2 */
-		c2  = 1'b1;
+//		c2  = 1'b1;
 		#2;
-		c2  = 1'b0;
+//		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
@@ -494,7 +494,6 @@ module vending_machine_test();
 		in1 = 1'b1;
 		#10;
 		in1 = 1'b0;
-		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#2
@@ -514,7 +513,6 @@ module vending_machine_test();
 		in2 = 1'b1;
 		#10;
 		in2 = 1'b0;
-		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#2
@@ -541,7 +539,6 @@ module vending_machine_test();
 		in3 = 1'b1;
 		#10;
 		in3 = 1'b0;
-		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#2
@@ -575,7 +572,6 @@ module vending_machine_test();
 		in3 = 1'b1;
 		#10;
 		in3 = 1'b0;
-		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#2
