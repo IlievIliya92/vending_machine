@@ -92,7 +92,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 	end
 
 	/* Always block to compute nextstate */
-	always @(state, c1, c2, in0, in1, in2, in3, cnl)
+	always @(state, c1, c2, in0, in1, in2, in3, cnl, item0_available, item1_available, item2_available, item3_available, coincount)
 	begin
 		nextstate = state;
 		case(state)
@@ -430,6 +430,8 @@ module vending_machine_test();
 	wire [2:0] cng;
 	wire [2:0] rtn;
 
+	integer clk_file, in0_file, in1_file, in2_file, in3_file, cnl_file, item0_available_file, item1_available_file, item2_available_file, pdt_file, cng0_file, cng1_file, cng2_file, rtn0_file, rtn1_file, rtn2_file;
+
 	vending_machine dut(.c1(c1), .c2(c2), .in0(in0), .in1(in1), .in2(in2), .in3(in3),
 			    .cnl(cnl), .clk(clk), .rst(rst), .item0_available(item0_available),
 			    .item1_available(item1_available), .item2_available(item2_available),
@@ -437,6 +439,28 @@ module vending_machine_test();
 			    .pdt(pdt), .cng(cng), .rtn(rtn));
 	
 	initial begin
+	clk_file = $fopen("clk_file.txt","w");
+	in0_file = $fopen("in0_file.txt","w");
+	in1_file = $fopen("in1_file.txt","w");
+	in2_file = $fopen("in2_file.txt","w");
+	in3_file = $fopen("in3_file.txt","w");
+	cnl_file = $fopen("cnl_file.txt","w");
+/*
+	item0_available_file = $fopen("clk_file.txt","w");
+	item1_available_file = $fopen("in0_file.txt","w");
+	item2_available_file = $fopen("in1_file.txt","w");
+//	item3_available_file = $fopen("in2_file.txt","w");
+
+	cng0_file = $fopen("cng0_file.txt","w");
+	cng1_file = $fopen("cng1_file.txt","w");
+	cng2_file = $fopen("cng2_file.txt","w");
+
+	rtn0_file = $fopen("rtn0_file.txt","w");
+	rtn1_file = $fopen("rtn1_file.txt","w");
+	rtn2_file = $fopen("rtn2_file.txt","w");
+
+	pdt_file = fopen("pdt_file.txt", "w");	
+*/	
 		#10;
 		/* Reset active low */
 		rst = 1'b1;
@@ -603,7 +627,7 @@ module vending_machine_test();
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 	  	/* Purchase not available product */
-	    item2_available = 1'b0;
+	    	item2_available = 1'b0;
 		in0 = 1'b0;
 		in1 = 1'b0;
 		in2 = 1'b1;
@@ -619,15 +643,28 @@ module vending_machine_test();
 	always #1
        	begin
 		clk   = ~clk;
-  	end
+		$fwrite(clk_file,"%b", clk);
+		$fwrite(in0_file,"%b", in0);
+		$fwrite(in1_file,"%b", in1);
+		$fwrite(in2_file,"%b", in2);
+		$fwrite(in3_file,"%b", in3);
+		$fwrite(cnl_file,"%b", cnl_file);
+/*
+		$fwrite(cng0_file,"%b", cng0_file);
+		$fwrite(cng1_file,"%b", cng1_file);
+		$fwrite(cng2_file,"%b", cng2_file);
+	*/
+  	
+
 
 `ifdef TEST_INFO
 	always #2
 	begin
+
 		if (pdt)
 			$display("[MACHINE OUTPUT] PDT = 1 CNG = %d", cng);
 		if (rtn)
-			$display("[MACHINE OUTPUT] Coins returned after cancleing order = %d",rtn);
+			$display("[MACHINE OUTPUT] Coins returned after cancleing order = %d", rtn);
 	end
 `endif
 
