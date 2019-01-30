@@ -624,34 +624,9 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
-		
 	end
-	/*
-	always #5
-	begin
-		if (tick >= t_0)
-		begin
-			$fwrite(out_log_file,"CLK = %b.\n", clk);
-			$fwrite(out_log_file,"RESET = %b.\n", rst);
-			$fwrite(out_log_file,"IN0 = %b.\n", in0);
-			$fwrite(out_log_file,"IN1 = %b.\n", in1);
-			$fwrite(out_log_file,"IN2 = %b.\n", in2);
-			$fwrite(out_log_file,"IN3 = %b.\n", in3);
-			$fwrite(out_log_file,"CNL = %b.\n", cnl);
-			$fwrite(out_log_file,"ITEM0_AVAILABLE = %b.\n", item0_available);
-			$fwrite(out_log_file,"ITEM1_AVAILABLE = %b.\n", item1_available);
-			$fwrite(out_log_file,"ITEM2_AVAILABLE = %b.\n", item2_available);
-			$fwrite(out_log_file,"ITEM3_AVAILABLE = %b.\n", item3_available);
-			$fwrite(out_log_file,"PDT = %b.\n", pdt);
-			$fwrite(out_log_file,"CHANGE_0 = %b.\n", cng[0]);
-			$fwrite(out_log_file,"CHANGE_1 = %b.\n", cng[1]);
-			$fwrite(out_log_file,"CHANGE_2 = %b.\n", cng[2]);
-			$fwrite(out_log_file,"RETURN_0 = %b.\n", rtn[0]);
-			$fwrite(out_log_file,"RETURN_1 = %b.\n", rtn[1]);
-			$fwrite(out_log_file,"RETURN_3 = %b.\n", rtn[2]);
-		end
-	end
-	*/
+	
+	
 	always #1
        	begin   
 		clk   = ~clk;
