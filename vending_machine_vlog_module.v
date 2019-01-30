@@ -490,13 +490,6 @@ module vending_machine_test();
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
-		#2
-		/* Insert one coin with value 2 */
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
 		#9
 		in1 = 1'b1;
 		#10;
