@@ -13,7 +13,7 @@ In order to compile and run the example the following package is required:
 
 		make install
 
-		For more details on the installation process follow the README inside the repository.
+		For more details on the installation process follow the README inside the iverilog repository.
 
 To compile and run the example:
 	2. Execute the following command to compile the .v file into an executable:
