@@ -1,5 +1,7 @@
 `define WARNING
-//`define FULL_TEST_SCENARIO
+//`define TEST_SCENARIO_CNL
+
+
 `define INFO
 `define TEST_INFO
 
@@ -432,7 +434,7 @@ module vending_machine_test();
 
 	integer out_log_file;
 	integer tick = 0;
-	localparam delta_t = 50;
+	localparam delta_t = 200;
 
 	vending_machine dut(.c1(c1), .c2(c2), .in0(in0), .in1(in1), .in2(in2), .in3(in3),
 			    .cnl(cnl), .clk(clk), .rst(rst), .item0_available(item0_available),
@@ -471,7 +473,7 @@ module vending_machine_test();
 		#10;
 		in0 = 1'b0;
 		$display("[USER INPUT] First item has been selected!");
-		
+
 		#10
 		/* Insert one coin with value 2 */
 		c2  = 1'b1;
@@ -485,110 +487,131 @@ module vending_machine_test();
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-`ifdef FULL_TEST_SCENARIO
-		/* Select item3 - SLANINA */
+
+		#2
+		/* Insert one coin with value 2 */
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#9
+		in1 = 1'b1;
+		#10;
+		in1 = 1'b0;
+		$display("[USER INPUT] Fourth item has been selected!");
+
+		/* Insert one coin with value 2 */
+		#2
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		/* Insert one coin with value 2 */
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#9
+		in2 = 1'b1;
+		#10;
+		in2 = 1'b0;
+		$display("[USER INPUT] Fourth item has been selected!");
+
+		/* Insert one coin with value 2 */
+		#2
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		/* Insert one coin with value 2 */
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		/* Insert one coin with value 2 */
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#9
 		in3 = 1'b1;
 		#10;
 		in3 = 1'b0;
 		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
-		#1
+		#2
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		/* Insert one coin with value 2 */
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1
-		c2  = 1'b1;
+		#2
+		c1  = 1'b1;
 		#2;
-		c2  = 1'b0;
+		c1  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
-		#1
+		#2
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
-		/* Select item3 - SLANINA */
-		in2 = 1'b1;
-		#2;
-		in2 = 1'b0;
-		$display("[USER INPUT] Third item has been selected!");
+		#9
+		in3 = 1'b1;
+		#10;
+		in3 = 1'b0;
+		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
-		#2;
+		#2
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-		#1;
+
+		#2
+		/* Insert one coin with value 2 */
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		/* Insert one coin with value 2 */
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+		#2
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+
+		#3
 		cnl = 1'b1;
-		#2;
+		#2
 		cnl = 1'b0;
-		$display("[USER INPUT] Requested canceling of the order!");
-
-		in1 = 1'b1;
-		#10;
-		in1 = 1'b0;
-		$display("[USER INPUT] Second item has been selected!");
-
-		/* Insert one coin with value 2 */
-		#2;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-	
-		/* Insert one coin with value 2 */
-		#2;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
-		in2 = 1'b1;
-		#10;
-		in2 = 1'b0;
-		$display("[USER INPUT] Third item has been selected!");
-	
-		/* Insert one coin with value 2 */
-		#1;
-		c1  = 1'b1;
-		#2;
-		c1  = 1'b0;
-		$display("[USER INPUT] Coin 1 with value 1 inserted!");
-	
-		#1;
-		c1  = 1'b1;
-		#2;
-		c1  = 1'b0;
-		$display("[USER INPUT] Coin 1 with value 1 inserted!");
-	
-		/* Insert one coin with value 2 */
-		#1;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
-		/* Insert one coin with value 2 */
-		#1;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
-	  	/* Purchase not available product */
-	    	item2_available = 1'b0;
-		in2 = 1'b1;
-		#2;
-		in2 = 1'b0;
-`endif
-
 	end
 	
 	always #1
