@@ -1,5 +1,6 @@
+`define WARNING
 `define INFO
-`define DEBUG
+`define TEST_INFO
 
 module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 	         	item0_available, item1_available, item2_available,
@@ -59,10 +60,26 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 
 	/* Variables initialization */
 	initial begin
+		/* Init coincount variable */
 		coincount = 3'b000;
-	`ifdef INFO
-		$display("Variable Initialization Completed!");
-	`endif
+	end
+
+	always @(item0_available, item1_available, item2_available, item3_available)
+	begin
+`ifdef INFO
+		if (item0_available & item1_available & item2_available & item3_available)
+			$display("[INFO] All items are currently available.");
+`endif
+`ifdef WARNING
+		else if (!item0_available)
+			$display("[WARNING] Item 0 - currently not available!");
+		else if (!item1_available)
+			$display("[WARNING] Item 1 - currently not available!");
+		else if (!item2_available)
+			$display("[WARNING] Item 2 - currently not available!");
+		else if (!item3_available)
+			$display("[WARNING] Item 3 - currently not available!");
+`endif
 	end
 
 	/* Always block to update state */
@@ -99,7 +116,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = WAITING_0;
 				else
 					begin
-						$display("No Vafla Borovec available!");
+						$display("[ERROR] No Vafla Borovec available!");
 						nextstate = IDLE;
 					end
 			end
@@ -110,7 +127,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = WAITING_1;
 				else
 					begin
-						$display("No Patron Vodka available!");
+						$display("[ERROR] No Patron Vodka available!");
 						nextstate = IDLE;
 					end
 			end
@@ -121,7 +138,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = WAITING_2;
 				else
 					begin
-						$display("No Zlatna Arda available!");
+						$display("[ERROR] No Zlatna Arda available!");
 						nextstate = IDLE;
 					end
 			end
@@ -132,7 +149,7 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 					nextstate = WAITING_3;
 				else
 					begin
-						$display("No Slanina available!");
+						$display("[ERROR] No Slanina available!");
 						nextstate = IDLE;
 					end
 			end
@@ -215,32 +232,32 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 
 			VAFLA_BOROVEC:
 			begin
-	`ifdef DEBUG
-				$display("VAFLA_BOROVEC");
+	`ifdef INFO
+				$display("[INFO] VAFLA_BOROVEC");
 	`endif
 				nextstate = IDLE; 
 			end
 			
 			PATRON_VODKA:
 			begin
-	`ifdef DEBUG
-				$display("PATRON_VODKA");
+	`ifdef INFO
+				$display("[INFO] PATRON_VODKA");
 	`endif
 				nextstate = IDLE; 
 			end
 
 			ZLATNA_ARDA:
 			begin
-	`ifdef DEBUG
-				$display("ZLATNA_ARDA");
+	`ifdef INFO
+				$display("[INFO] ZLATNA_ARDA");
 	`endif
 				nextstate = IDLE; 
 			end
 
 			SLANINA:
 			begin
-	`ifdef DEBUG
-				$display("SLANINA");
+	`ifdef INFO
+				$display("[INFO] SLANINA");
 	`endif
 				nextstate = IDLE; 
 			end
@@ -449,17 +466,20 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+		$display("[USER INPUT] First item has been selected!");
 
-		/* Insert one coin with value 1 */
+		/* Insert one coin with value 2 */
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
 		#1000
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Select item3 - SLANINA */
 		in0 = 1'b0;
@@ -471,24 +491,28 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+		$display("[USER INPUT] Fourth item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#1000
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
 		#1000
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
 		#1000
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Select item3 - SLANINA */
 		in0 = 1'b0;
@@ -500,17 +524,19 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+		$display("[USER INPUT] Third item has been selected!");
 
 		/* Insert one coin with value 2 */
 		#1000;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
-	
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 		#1000;
 		cnl = 1'b1;
 		#2;
 		cnl = 1'b0;
+		$display("[USER INPUT] Requested canceling of the order!");
 
 		in0 = 1'b0;
 		in1 = 1'b1;
@@ -521,19 +547,23 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+		$display("[USER INPUT] Second item has been selected!");
+
+		/* Insert one coin with value 2 */
+		#1000;
+		c2  = 1'b1;
+		#2;
+		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+	
 	
 		/* Insert one coin with value 2 */
 		#1000;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
-	
-		/* Insert one coin with value 2 */
-		#1000;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
-		
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
 		in0 = 1'b0;
 		in1 = 1'b0;
 		in2 = 1'b1;
@@ -543,25 +573,47 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+		$display("[USER INPUT] Third item has been selected!");
+	
+		/* Insert one coin with value 2 */
+		#1000;
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+		$display("[USER INPUT] Coin 1 with value 1 inserted!");
+	
+		#1000;
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+		$display("[USER INPUT] Coin 1 with value 1 inserted!");
 	
 		/* Insert one coin with value 2 */
 		#1000;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
-	
-		/* Insert one coin with value 2 */
-		#1000;
-		c2  = 1'b1;
-		#2;
-		c2  = 1'b0;
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
 
 		/* Insert one coin with value 2 */
 		#1000;
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
-		
+		$display("[USER INPUT] Coin 2 with value 2 inserted!");
+
+	  	/* Purchase not available product */
+	    item2_available = 1'b0;
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b1;
+		in3 = 1'b0;
+		#10;
+		in0 = 1'b0;
+		in1 = 1'b0;
+		in2 = 1'b0;
+		in3 = 1'b0;
+
 	end
 
 	always #1
@@ -569,14 +621,13 @@ module vending_machine_test();
 		clk   = ~clk;
   	end
 
-`ifdef DEBUG
+`ifdef TEST_INFO
 	always #2
 	begin
 		if (pdt)
-			$display("PDT = 1 CNG = %d", cng);
+			$display("[MACHINE OUTPUT] PDT = 1 CNG = %d", cng);
 		if (rtn)
-			$display("Coins returned after cancleing order = %d", rtn);
-
+			$display("[MACHINE OUTPUT] Coins returned after cancleing order = %d",rtn);
 	end
 `endif
 
