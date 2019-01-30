@@ -2,10 +2,10 @@ Simple implementation of a vending machine in verilog language.
 
 In order to compile and run the example the following package is required:
 	1. Icarus Verilog (iverilog) available at:
-	git clone git://github.com/steveicarus/iverilog.git
+	github.com/steveicarus/iverilog.git
 
 		1.1. Brief installation on Linux distribution:
-
+		git clone git://github.com/steveicarus/iverilog.git
 		cd <root_to_iverilog_directory>
 		sh autoconf.sh
 		./configure
