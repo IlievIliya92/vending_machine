@@ -445,17 +445,7 @@ module vending_machine_test();
 	initial begin
 	out_log_file = $fopen("./timing_diagrams/out_log.txt", "w");
 		
-		/* Reset active low */
-		rst = 1'b1;
-		/* Clock starting with high */
-		clk = 1'b1;
-		#5;
-		/* Init the vending machine */
-		rst = 1'b0;
-		#5;
-		c1 = 1'b0;
-		c2 = 1'b0;
-
+		/* Suppose pull-down everything init with zero values */
 		cnl = 0;
 		/* Indicate that all items are available */
 		item0_available = 1'b1;
@@ -467,6 +457,18 @@ module vending_machine_test();
 		in1 = 1'b0;
 		in2 = 1'b0;
 		in3 = 1'b0;
+
+		c1 = 1'b0;
+		c2 = 1'b0;
+
+		/* Reset active low */
+		rst = 1'b1;
+		/* Clock starting with high */
+		clk = 1'b1;
+		#5;
+		/* Init the vending machine */
+		rst = 1'b0;
+		#5;
 
 		/* Select item0 - VAFLA_BOROVEC */
 		in0 = 1'b1;
