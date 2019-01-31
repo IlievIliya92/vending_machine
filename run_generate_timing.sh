@@ -1,11 +1,11 @@
 #!/bin/sh
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 4 ]; then
     echo "Insuficient amount of arguments!"
 	echo "### USAGE ###";
-	echo "./run_generate_timing.sh <cell-width> <cell-height> <font-size> "
+	echo "./run_generate_timing.sh <cell-width> <cell-height> <font-size> <line width>"
 	echo "### Recommended USAGE"
-	echo "./run_generate_timing.sh 1 48 25"
+	echo "./run_generate_timing.sh 1 48 25 4"
     exit;
 fi
 
@@ -36,7 +36,7 @@ echo "############## Vending machine output ##############"
 echo "####################################################"
 
 echo "Parsing results"
-drawtiming --output ./timing_diagrams/timing_result.gif ./timing_diagrams/out_log.txt --cell-width $1 -c $2 -f $3
+drawtiming --output ./timing_diagrams/timing_result.gif ./timing_diagrams/out_log.txt --cell-width $1 -c $2 -f $3 -l $4
 if [ -e ./timing_diagrams/timing_result.gif ]
 then
 	echo "Timing diagram saved to ./timing_diagrams/timing_result.gif"
