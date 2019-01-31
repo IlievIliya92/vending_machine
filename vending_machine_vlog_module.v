@@ -629,7 +629,7 @@ module vending_machine_test();
 		$fwrite(out_log_file,"CHANGE_2 = %b.\n", cng[2]);
 		$fwrite(out_log_file,"RETURN_0 = %b.\n", rtn[0]);
 		$fwrite(out_log_file,"RETURN_1 = %b.\n", rtn[1]);
-		$fwrite(out_log_file,"RETURN_3 = %b.\n", rtn[2]);
+		$fwrite(out_log_file,"RETURN_2 = %b.\n", rtn[2]);
 	
 		if (delta_t == tick)
 		begin
