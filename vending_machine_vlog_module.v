@@ -478,11 +478,11 @@ module vending_machine_test();
 
 		#10
 		/* Insert one coin with value 2 */
-//		c2  = 1'b1;
+		c2  = 1'b1;
 		#2;
-//		c2  = 1'b0;
+		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-
+//error
 		/* Insert one coin with value 2 */
 		#2
 		c2  = 1'b1;
