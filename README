@@ -19,8 +19,31 @@ To compile and run the example:
 	2. Execute the following command to compile the .v file into an executable:
 
 	cd <root_of_vending_machine_repo>
-	iverilog vending_machine_vlog_module.v -o vending_machine
+	$ iverilog vending_machine_vlog_module.v -o vending_machine
 
 	3. Run the example:
 
-	./vending_machine
+	$ ./vending_machine
+
+
+To simulate the circuit and generate the timing diagrams:
+	1. Install drawtiming available at:
+	https://github.com/ironss/drawtiming
+	
+	On Ubuntu drawtiming can be installed as a package.
+	$ sudo apt-get update
+	$ sudo apt-get install drawtiming
+
+	2. To generate timing diagram based on the test bench:
+	$ cd <root_of_vending_machine_repo>
+	$ drawtiming --output ./timing_diagrams/timing_result.gif ./timing_diagrams/out_log.txt --cell-width 1
+	$ xdg-open ./timing_diagrams/timing_result.gif
+
+To build, run and generate timing diagrams run the following scipt:
+	$ cd <root_of_vending_machine_repo>
+	$ chmod +x run_generate_timing.sh
+	$ ./run_generate_timing.sh
+
+
+
+
