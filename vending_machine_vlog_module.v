@@ -1,6 +1,7 @@
+`timescale 1 ns / 1 ns
+
 `define WARNING
 //`define TEST_SCENARIO_CNL
-
 
 `define INFO
 `define TEST_INFO
@@ -424,7 +425,6 @@ module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 
 endmodule
 
-`timescale 1 ns / 1 ns
 module vending_machine_test();
 	reg c1, c2, in0, in1, in2, in3, cnl, clk, rst;
 	reg item0_available, item1_available, item2_available, item3_available;

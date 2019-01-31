@@ -19,7 +19,7 @@ else
 fi
 
 echo "Building app"
-iverilog vending_machine_vlog_module.v -o vending_machine
+iverilog vending_machine_vlog_module.v -o vending_machine -Wall
 
 if [ -e ./vending_machine ]
 then
