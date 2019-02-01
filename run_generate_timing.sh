@@ -11,11 +11,18 @@ fi
 
 if [ -e ./vending_machine ]
 then
-	echo "Clean all!"
+	echo "Cleaning executable!"
 	rm ./vending_machine
+else
+    echo "Executable not present";
+fi
+
+if [ -e ./timing_diagrams/timing_result.gif ]
+then
+	echo "Cleaning timing_diagram result!"
 	rm ./timing_diagrams/timing_result.gif
 else
-    echo "Nothing to be cleaned!";
+    echo "Timing diagram not present";
 fi
 
 echo "Building app"
@@ -23,7 +30,7 @@ iverilog vending_machine_vlog_module.v -o vending_machine -Wall
 
 if [ -e ./vending_machine ]
 then
-    echo "echo Building finished!";
+    echo "Building finished!";
 else
     echo "Building Failed!";
     exit;
