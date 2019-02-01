@@ -1,10 +1,10 @@
 `timescale 1 ns / 1 ns
 
 `define WARNING
-//`define TEST_SCENARIO_CNL
-
 `define INFO
 `define TEST_INFO
+
+//`define TEST_SCENARIO
 
 module vending_machine(c1, c2, in0, in1, in2, in3, cnl, pdt, cng, rtn,
 	         	item0_available, item1_available, item2_available,
@@ -476,13 +476,22 @@ module vending_machine_test();
 		in0 = 1'b0;
 		$display("[USER INPUT] First item has been selected!");
 
+`ifdef TEST_SCENARIO
+		#10
+		/* Insert one coin with value 2 */
+		c1  = 1'b1;
+		#2;
+		c1  = 1'b0;
+		$display("[USER INPUT] Coin 1 with value 1 inserted!");
+`else
 		#10
 		/* Insert one coin with value 2 */
 		c2  = 1'b1;
 		#2;
 		c2  = 1'b0;
 		$display("[USER INPUT] Coin 2 with value 2 inserted!");
-//error
+`endif
+
 		/* Insert one coin with value 2 */
 		#2
 		c2  = 1'b1;
